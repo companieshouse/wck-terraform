@@ -108,12 +108,12 @@ bep_cw_logs = {
   }
 
   "backend.log" = {
-    file_path = "/home/chd"
+    file_path = "/home/wck"
     log_group_retention = 7
   }
 
   "weeding.log" = {
-    file_path = "/home/chd"
+    file_path = "/home/wck"
     log_group_retention = 7
   }
 }
