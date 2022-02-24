@@ -116,7 +116,7 @@ bep_cw_logs = {
 }
 
 # NFS Configuration
-#nfs_server = "192.168.255.35"
+nfs_server = "192.168.255.35"
 nfs_mount_destination_parent_dir = "/-"
 nfs_mounts = {
   # Onsite Mounts
