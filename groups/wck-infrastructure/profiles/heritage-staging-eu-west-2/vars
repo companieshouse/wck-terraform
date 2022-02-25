@@ -127,3 +127,8 @@ nfs_mounts = {
     local_mount_point = "/mnt/nfs/wck/image"
   },
 }
+
+# SNS Notifications
+# Disabled while testing
+#sns_notifications_enable = true
+sns_notifications_enable = false

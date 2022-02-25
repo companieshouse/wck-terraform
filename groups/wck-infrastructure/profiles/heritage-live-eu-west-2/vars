@@ -126,3 +126,8 @@ nfs_mounts = {
     nfs_server_address = "ipo-file-svm-lif-be1.internal.ch"
   },
 }
+
+# SNS Notifications
+# Disabled while testing
+#sns_notifications_enable = true
+sns_notifications_enable = false

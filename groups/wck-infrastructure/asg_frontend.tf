@@ -122,3 +122,35 @@ module "fe_asg" {
     module.wck_internal_alb
   ]
 }
+
+#--------------------------------------------
+# Frontend ASG CloudWatch Alarms
+#--------------------------------------------
+module "fe_asg_alarms" {
+  source = "git@github.com:companieshouse/terraform-modules//aws/asg-cloudwatch-alarms?ref=tags/1.0.108"
+
+  autoscaling_group_name = module.fe_asg.this_autoscaling_group_name
+  prefix                 = "${var.application}-fe-asg-alarms"
+
+  in_service_evaluation_periods      = "3"
+  in_service_statistic_period        = "120"
+  expected_instances_in_service      = var.fe_asg_desired_capacity
+  in_pending_evaluation_periods      = "3"
+  in_pending_statistic_period        = "120"
+  in_standby_evaluation_periods      = "3"
+  in_standby_statistic_period        = "120"
+  in_terminating_evaluation_periods  = "3"
+  in_terminating_statistic_period    = "120"
+  total_instances_evaluation_periods = "3"
+  total_instances_statistic_period   = "120"
+  total_instances_in_service         = var.fe_asg_desired_capacity
+
+  actions_alarm = var.sns_notifications_enable ? [module.cloudwatch_sns_notifications[0].sns_topic_arn] : []
+  actions_ok    = var.sns_notifications_enable ? [module.cloudwatch_sns_notifications[0].sns_topic_arn] : []
+
+
+  depends_on = [
+    module.cloudwatch_sns_notifications,
+    module.fe_asg
+  ]
+}

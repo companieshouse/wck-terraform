@@ -70,6 +70,12 @@ variable "nfs_mounts" {
   }
 }
 
+variable "sns_notifications_enable" { 
+  type        = bool
+  description = "Controls whether SNS notifications and associated resources are created (true) or not (false)"
+  default     = false
+}
+
 # ------------------------------------------------------------------------------
 # WCK BEP Variables
 # ------------------------------------------------------------------------------
