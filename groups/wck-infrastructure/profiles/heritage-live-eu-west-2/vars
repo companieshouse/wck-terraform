@@ -69,9 +69,9 @@ fe_cw_logs = {
 # WCK BEP
 # ------------------------------------------------------------------------------
 bep_instance_size = "t2.medium"
-bep_asg_min_size = 1
-bep_asg_max_size = 1
-bep_asg_desired_capacity = 1
+bep_asg_min_size = 0
+bep_asg_max_size = 0
+bep_asg_desired_capacity = 0
 
 bep_cw_logs = {
   "messages" = {
