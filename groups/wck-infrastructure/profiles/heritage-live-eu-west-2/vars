@@ -1,0 +1,133 @@
+# Account details
+aws_profile = "heritage-live-eu-west-2"
+aws_region  = "eu-west-2"
+aws_account = "heritage-live"
+
+# Account shorthand
+account     = "hlive"
+region      = "euw2"
+environment = "live"
+
+application = "wck"
+
+# ------------------------------------------------------------------------------
+# WCK FE
+# ------------------------------------------------------------------------------
+fe_instance_size = "t2.medium"
+fe_asg_min_size = 0
+fe_asg_max_size = 0
+fe_asg_desired_capacity = 0
+
+fe_public_access_cidrs = [
+  "0.0.0.0/0"
+]
+
+fe_cw_logs = {
+  "audit.log" = {
+    file_path = "/var/log/audit"
+    log_group_retention = 7
+  }
+
+  "messages" = {
+    file_path = "/var/log"
+    log_group_retention = 7
+  }
+
+  "secure" = {
+    file_path = "/var/log"
+    log_group_retention = 7
+  }
+
+  "yum.log" = {
+    file_path = "/var/log"
+    log_group_retention = 7
+  }
+
+  "errors.log" = {
+    file_path = "/var/log/amazon/ssm"
+    log_group_retention = 7
+  }
+
+  "amazon-ssm-agent.log" = {
+    file_path = "/var/log/amazon/ssm"
+    log_group_retention = 7
+  }
+
+  "wck_access_log" = {
+    file_path = "/etc/httpd/logs"
+    log_group_retention = 7
+  }
+
+  "wck_error_log" = {
+    file_path = "/etc/httpd/logs"
+    log_group_retention = 7
+  }
+
+}
+
+# ------------------------------------------------------------------------------
+# WCK BEP
+# ------------------------------------------------------------------------------
+bep_instance_size = "t2.medium"
+bep_asg_min_size = 1
+bep_asg_max_size = 1
+bep_asg_desired_capacity = 1
+
+bep_cw_logs = {
+  "messages" = {
+    file_path = "/var/log"
+    log_group_retention = 7
+  }
+
+  "secure" = {
+    file_path = "/var/log"
+    log_group_retention = 7
+  }
+
+  "yum.log" = {
+    file_path = "/var/log"
+    log_group_retention = 7
+  }
+
+  "cron" = {
+    file_path = "/var/log"
+    log_group_retention = 7
+  }
+
+  "errors.log" = {
+    file_path = "/var/log/amazon/ssm"
+    log_group_retention = 7
+  }
+
+  "amazon-ssm-agent.log" = {
+    file_path = "/var/log/amazon/ssm"
+    log_group_retention = 7
+  }
+
+  "backend.log" = {
+    file_path = "/home/wck"
+    log_group_retention = 7
+  }
+
+  "weeding.log" = {
+    file_path = "/home/wck"
+    log_group_retention = 7
+  }
+}
+
+# NFS Configuration
+nfs_server = "192.168.255.35"
+nfs_mount_destination_parent_dir = "/-"
+nfs_mounts = {
+  # Onsite Mounts
+  wck_image_onp = {
+    local_mount_point = "/mnt/nfs/onsite/wck/image"
+    nfs_source_mount = "wck_image"
+    nfs_server_address = "ipo-file-svm-lif-be1.internal.ch"
+  },
+}
+
+# SNS Notifications
+# Disabled while testing
+#sns_notifications_enable = true
+sns_notifications_enable = false
