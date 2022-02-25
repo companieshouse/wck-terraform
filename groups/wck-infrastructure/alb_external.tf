@@ -92,13 +92,27 @@ module "wck_external_alb" {
 }
 
 #--------------------------------------------
-# External ALB CloudWatch Merics
+# External ALB CloudWatch Alarms
 #--------------------------------------------
-module "external_alb_metrics" {
-  source = "git@github.com:companieshouse/terraform-modules//aws/alb-metrics?ref=tags/1.0.26"
+module "wck_external_alb_alarms" {
+  source = "git@github.com:companieshouse/terraform-modules//aws/alb-cloudwatch-alarms?ref=tags/1.0.104"
 
-  load_balancer_id = module.wck_external_alb.this_lb_id
-  target_group_ids = module.wck_external_alb.target_group_arns
+  alb_arn_suffix            = module.wck_external_alb.this_lb_arn_suffix
+  target_group_arn_suffixes = module.wck_external_alb.target_group_arn_suffixes
 
-  depends_on = [module.wck_external_alb]
+  prefix                    = "wck-frontend-"
+  response_time_threshold   = "100"
+  evaluation_periods        = "3"
+  statistic_period          = "60"
+  maximum_4xx_threshold     = "2"
+  maximum_5xx_threshold     = "2"
+  unhealthy_hosts_threshold = "1"
+
+  actions_alarm = var.sns_notifications_enable ? [module.cloudwatch_sns_notifications[0].sns_topic_arn] : []
+  actions_ok    = var.sns_notifications_enable ? [module.cloudwatch_sns_notifications[0].sns_topic_arn] : []
+
+  depends_on = [
+    module.cloudwatch_sns_notifications,
+    module.wck_external_alb
+  ]
 }
