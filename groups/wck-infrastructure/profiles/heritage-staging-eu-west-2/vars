@@ -129,6 +129,4 @@ nfs_mounts = {
 }
 
 # SNS Notifications
-# Disabled while testing
-#sns_notifications_enable = true
-sns_notifications_enable = false
+enable_sns_topic = false

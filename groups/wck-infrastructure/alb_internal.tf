@@ -122,8 +122,8 @@ module "wck_internal_alb_alarms" {
   maximum_5xx_threshold     = "2"
   unhealthy_hosts_threshold = "1"
 
-  actions_alarm = var.sns_notifications_enable ? [module.cloudwatch_sns_notifications[0].sns_topic_arn] : []
-  actions_ok    = var.sns_notifications_enable ? [module.cloudwatch_sns_notifications[0].sns_topic_arn] : []
+  actions_alarm = var.enable_sns_topic ? [module.cloudwatch_sns_notifications[0].sns_topic_arn] : []
+  actions_ok    = var.enable_sns_topic ? [module.cloudwatch_sns_notifications[0].sns_topic_arn] : []
 
   depends_on = [
     module.cloudwatch_sns_notifications,
