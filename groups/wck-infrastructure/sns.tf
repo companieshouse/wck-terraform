@@ -1,5 +1,5 @@
 module "cloudwatch_sns_notifications" {
-  count = var.sns_notifications_enable ? 1 : 0
+  count = var.enable_sns_topic ? 1 : 0
 
   source  = "terraform-aws-modules/sns/aws"
   version = "3.3.0"

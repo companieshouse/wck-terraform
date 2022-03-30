@@ -70,9 +70,9 @@ variable "nfs_mounts" {
   }
 }
 
-variable "sns_notifications_enable" { 
+variable "enable_sns_topic" {
   type        = bool
-  description = "Controls whether SNS notifications and associated resources are created (true) or not (false)"
+  description = "A boolean value to alter deployment of an SNS topic for CloudWatch actions"
   default     = false
 }
 

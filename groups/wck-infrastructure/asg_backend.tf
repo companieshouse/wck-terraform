@@ -129,8 +129,8 @@ module "bep_asg_alarms" {
   total_instances_statistic_period   = "120"
   total_instances_in_service         = var.bep_asg_desired_capacity
 
-  actions_alarm = var.sns_notifications_enable ? [module.cloudwatch_sns_notifications[0].sns_topic_arn] : []
-  actions_ok    = var.sns_notifications_enable ? [module.cloudwatch_sns_notifications[0].sns_topic_arn] : []
+  actions_alarm = var.enable_sns_topic ? [module.cloudwatch_sns_notifications[0].sns_topic_arn] : []
+  actions_ok    = var.enable_sns_topic ? [module.cloudwatch_sns_notifications[0].sns_topic_arn] : []
 
 
   depends_on = [
