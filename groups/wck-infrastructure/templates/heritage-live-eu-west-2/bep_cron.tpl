@@ -18,7 +18,7 @@
 
 #LIVE### Weed the Image system
 #LIVE##*/30  * * * *  /home/wck/chd3backend/weedDocs.sh >/dev/null 2>&1
-#LIVE##59 0 * * *  /home/wck/WCKdownloadStats.sh >/dev/null 2>&1
+#LIVE##59 0 * * *  /home/wck/chd3backend/WCKdownloadStats.sh >/dev/null 2>&1
 #LIVE##*/25 6-18 * * 1-6 /home/wck/chd3backend/monitorLockChecker.sh >/dev/null 2>&1
 #LIVE##30 6 * * 1 /home/wck/chd3backend/getSpendingCusts.sh >/dev/null 2>&1
 #LIVE##59 23 * * * /home/wck/chd3backend/lastDayOfMonth.sh && /home/wck/chd3backend/getWCKmonStats.sh >/dev/null 2>&1
