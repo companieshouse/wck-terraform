@@ -113,6 +113,12 @@ bep_cw_logs = {
     file_path = "/home/wck"
     log_group_retention = 7
   }
+
+  "paymentTXReport.log" = {
+    file_path = "/home/wck"
+    log_group_retention = 7
+  }
+
 }
 
 # NFS Configuration
