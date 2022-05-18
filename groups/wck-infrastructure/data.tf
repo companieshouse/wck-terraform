@@ -148,6 +148,19 @@ data "template_cloudinit_config" "fe_userdata_config" {
   base64_encode = true
 
   part {
+    content_type = "text/cloud-config"
+    content = templatefile("${path.module}/templates/fe_ftp_server.tpl", {
+      int_passive_ports_start = var.fe_ftp_int_passive_ports_start
+      int_passive_ports_end   = var.fe_ftp_int_passive_ports_end
+      internal_nlb_name       = module.nlb_fe_internal.this_lb_dns_name
+      ext_passive_ports_start = var.fe_ftp_ext_passive_ports_start
+      ext_passive_ports_end   = var.fe_ftp_ext_passive_ports_end
+      external_nlb_name       = module.nlb_fe_external.this_lb_dns_name
+      root_dir                = var.fe_ftp_root_dir
+    })
+  }
+
+  part {
     content_type = "text/x-shellscript"
     content      = data.template_file.fe_userdata.rendered
   }

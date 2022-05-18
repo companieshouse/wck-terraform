@@ -9,6 +9,65 @@ module "wck_fe_asg_security_group" {
   description = "Security group for the ${var.application} frontend asg"
   vpc_id      = data.aws_vpc.vpc.id
 
+  ingress_with_cidr_blocks = [
+    {
+      from_port   = 21
+      to_port     = 21
+      protocol    = "tcp"
+      description = "Allow FTP connections from internal networks"
+      cidr_blocks = join(",", local.admin_cidrs)
+    },
+    {
+      from_port   = var.fe_ftp_int_passive_ports_start
+      to_port     = var.fe_ftp_int_passive_ports_end
+      protocol    = "tcp"
+      description = "Allow FTP passive connections from internal networks"
+      cidr_blocks = join(",", local.admin_cidrs)
+    },
+    {
+      from_port   = 21
+      to_port     = 21
+      protocol    = "tcp"
+      description = "Allow FTP connections from internal NLB"
+      cidr_blocks = join(",", formatlist("%s/32", [for eni in data.aws_network_interface.nlb_fe_internal : eni.private_ip]))
+    },
+    {
+      from_port   = var.fe_ftp_int_passive_ports_start
+      to_port     = var.fe_ftp_int_passive_ports_end
+      protocol    = "tcp"
+      description = "Allow FTP passive connections from internal NLB"
+      cidr_blocks = join(",", formatlist("%s/32", [for eni in data.aws_network_interface.nlb_fe_internal : eni.private_ip]))
+    },
+    {
+      from_port   = 2121
+      to_port     = 2121
+      protocol    = "tcp"
+      description = "Allow FTP connections from external NLB"
+      cidr_blocks = join(",", formatlist("%s/32", [for eni in data.aws_network_interface.nlb_fe_external : eni.private_ip]))
+    },
+    {
+      from_port   = var.fe_ftp_ext_passive_ports_start
+      to_port     = var.fe_ftp_ext_passive_ports_end
+      protocol    = "tcp"
+      description = "Allow FTP passive connections from external NLB"
+      cidr_blocks = join(",", formatlist("%s/32", [for eni in data.aws_network_interface.nlb_fe_external : eni.private_ip]))
+    },
+    {
+      from_port   = 2121
+      to_port     = 2121
+      protocol    = "tcp"
+      description = "Allow FTP connections from external"
+      cidr_blocks = join(",", var.fe_public_access_cidrs)
+    },
+    {
+      from_port   = var.fe_ftp_ext_passive_ports_start
+      to_port     = var.fe_ftp_ext_passive_ports_end
+      protocol    = "tcp"
+      description = "Allow FTP passive connections from external"
+      cidr_blocks = join(",", var.fe_public_access_cidrs)
+    },
+  ]
+
   computed_ingress_with_source_security_group_id = [
     {
       rule                     = "http-80-tcp"

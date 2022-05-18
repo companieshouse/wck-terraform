@@ -221,3 +221,33 @@ variable "fe_access_cidrs" {
   description = "List of additional CIDRs requiring access via the internal ALB"
   default     = []
 }
+
+variable "fe_ftp_int_passive_ports_start" {
+  type        = number
+  default     = 60401
+  description = "The starting port that will define the range of ports used for FTP passive mode on the Internal FTP server"
+}
+
+variable "fe_ftp_int_passive_ports_end" {
+  type        = number
+  default     = 60420
+  description = "The ending port that will define the range of ports used for FTP passive mode on the Internal FTP server"
+}
+
+variable "fe_ftp_ext_passive_ports_start" {
+  type        = number
+  default     = 60451
+  description = "The starting port that will define the range of ports used for FTP passive mode on the External FTP server"
+}
+
+variable "fe_ftp_ext_passive_ports_end" {
+  type        = number
+  default     = 60470
+  description = "The ending port that will define the range of ports used for FTP passive mode on the External FTP server"
+}
+
+variable "fe_ftp_root_dir" {
+  type        = string
+  default     = "/mnt/nfs/onsite/wck/"
+  description = "Path for the FTP server's root directory"
+}

@@ -9,7 +9,11 @@ module "wck_internal_alb_security_group" {
   description = "Security group for the ${var.application} web servers"
   vpc_id      = data.aws_vpc.vpc.id
 
-  ingress_cidr_blocks = local.admin_cidrs
+  ingress_cidr_blocks = concat(
+    local.admin_cidrs,
+    formatlist("%s/32", [for eni in data.aws_network_interface.nlb_fe_internal : eni.private_ip])
+  )
+
   ingress_rules       = ["http-80-tcp", "https-443-tcp"]
 
   ingress_with_cidr_blocks = local.fe_alb_app_access
