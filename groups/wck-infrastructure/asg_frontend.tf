@@ -165,7 +165,18 @@ module "fe_asg" {
   refresh_triggers               = ["launch_configuration"]
   key_name                       = aws_key_pair.wck_keypair.key_name
   termination_policies           = ["OldestLaunchConfiguration"]
-  target_group_arns              = concat(module.wck_external_alb.target_group_arns, module.wck_internal_alb.target_group_arns)
+  target_group_arns              = concat(
+    module.wck_external_alb.target_group_arns,
+    module.wck_internal_alb.target_group_arns,
+    flatten(
+      [
+        for num in range(2, length(module.nlb_fe_internal.target_group_arns)) : [
+          [module.nlb_fe_internal.target_group_arns[num], module.nlb_fe_external.target_group_arns[num]]
+        ]
+      ]
+    )
+  )
+
   iam_instance_profile           = module.wck_fe_profile.aws_iam_instance_profile.name
   user_data_base64               = data.template_cloudinit_config.fe_userdata_config.rendered
 
