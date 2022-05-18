@@ -24,6 +24,12 @@ fe_public_access_cidrs = [
   "127.0.0.1/32"
 ]
 
+fe_ftp_int_passive_ports_start = 60401
+fe_ftp_int_passive_ports_end   = 60410
+fe_ftp_ext_passive_ports_start = 60451
+fe_ftp_ext_passive_ports_end   = 60460
+fe_ftp_root_dir = "/mnt/nfs/wck/"
+
 fe_cw_logs = {
   "audit.log" = {
     file_path = "/var/log/audit"
@@ -62,6 +68,11 @@ fe_cw_logs = {
 
   "wck_error_log" = {
     file_path = "/etc/httpd/logs"
+    log_group_retention = 7
+  }
+
+  "ftp_xfer_log" = {
+    file_path = "/var/log/xferlog"
     log_group_retention = 7
   }
 }

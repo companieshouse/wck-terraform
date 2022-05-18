@@ -63,6 +63,10 @@ fe_cw_logs = {
     log_group_retention = 7
   }
 
+  "ftp_xfer_log" = {
+    file_path = "/var/log/xferlog"
+    log_group_retention = 7
+  }
 }
 
 # ------------------------------------------------------------------------------

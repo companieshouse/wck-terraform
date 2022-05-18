@@ -51,6 +51,64 @@ locals {
     }
   ] : []
 
+  # Generate listener configuration for FTP passive ports
+  wck_fe_ftp_int_passive_listeners = [
+    for num in range(var.fe_ftp_int_passive_ports_start, var.fe_ftp_int_passive_ports_end + 1) : {
+      port               = format("%d", num)
+      protocol           = "TCP"
+    }
+  ]
+  wck_fe_ftp_ext_passive_listeners = [
+    for num in range(var.fe_ftp_ext_passive_ports_start, var.fe_ftp_ext_passive_ports_end + 1) : {
+      port               = format("%d", num)
+      protocol           = "TCP"
+    }
+  ]
+
+  # Generate target group configuration for FTP passive ports
+  # Internal NLB TGs
+  wck_fe_internal_ftp_passive_tgs = [
+    for num in range(var.fe_ftp_int_passive_ports_start, var.fe_ftp_int_passive_ports_end + 1) : {
+      name                 = "tg-${var.application}-fe-int-ftp-${num}"
+      backend_protocol     = "TCP"
+      backend_port         = num
+      target_type          = "instance"
+      deregistration_delay = 10
+      health_check = {
+        enabled             = true
+        interval            = 30
+        port                = 21
+        healthy_threshold   = 3
+        unhealthy_threshold = 3
+        protocol            = "TCP"
+      }
+      tags = {
+        InstanceTargetGroupTag = var.application
+      }
+    }
+  ]
+
+  # External NLB TGs
+  wck_fe_external_ftp_passive_tgs = [
+    for num in range(var.fe_ftp_ext_passive_ports_start, var.fe_ftp_ext_passive_ports_end + 1) : {
+      name                 = "tg-${var.application}-fe-ext-ftp-${num}"
+      backend_protocol     = "TCP"
+      backend_port         = num
+      target_type          = "instance"
+      deregistration_delay = 10
+      health_check = {
+        enabled             = true
+        interval            = 30
+        port                = 2121
+        healthy_threshold   = 3
+        unhealthy_threshold = 3
+        protocol            = "TCP"
+      }
+      tags = {
+        InstanceTargetGroupTag = var.application
+      }
+    }
+  ]
 
   wck_fe_ansible_inputs = {
     s3_bucket_releases         = local.s3_releases["release_bucket_name"]
