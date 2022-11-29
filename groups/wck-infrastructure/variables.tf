@@ -251,3 +251,9 @@ variable "fe_ftp_root_dir" {
   default     = "/mnt/nfs/onsite/wck/"
   description = "Path for the FTP server's root directory"
 }
+
+variable "test_access_enable" {
+  type        = bool
+  description = "Controls whether access from the Test subnets is required (true) or not (false)"
+  default     = false
+}

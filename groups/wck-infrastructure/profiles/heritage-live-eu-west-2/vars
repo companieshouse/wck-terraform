@@ -139,3 +139,5 @@ nfs_mounts = {
 
 # SNS Notifications
 enable_sns_topic = true
+
+test_access_enable = true
