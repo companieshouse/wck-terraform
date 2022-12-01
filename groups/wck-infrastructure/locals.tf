@@ -3,6 +3,7 @@
 # ------------------------------------------------------------------------
 locals {
   admin_cidrs = values(data.vault_generic_secret.internal_cidrs.data)
+  test_cidrs  = var.test_access_enable ? jsondecode(data.vault_generic_secret.test_cidrs.data["cidrs"]) : []
 
   internal_fqdn = format("%s.%s.aws.internal", split("-", var.aws_account)[1], split("-", var.aws_account)[0])
 

@@ -11,7 +11,8 @@ module "wck_internal_alb_security_group" {
 
   ingress_cidr_blocks = concat(
     local.admin_cidrs,
-    formatlist("%s/32", [for eni in data.aws_network_interface.nlb_fe_internal : eni.private_ip])
+    formatlist("%s/32", [for eni in data.aws_network_interface.nlb_fe_internal : eni.private_ip]),
+    local.test_cidrs
   )
 
   ingress_rules       = ["http-80-tcp", "https-443-tcp"]
