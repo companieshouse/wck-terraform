@@ -248,7 +248,7 @@ variable "fe_ftp_ext_passive_ports_end" {
 
 variable "fe_ftp_root_dir" {
   type        = string
-  default     = "/mnt/nfs/onsite/wck/"
+  default     = "/mnt/nfs/wck/"
   description = "Path for the FTP server's root directory"
 }
 
