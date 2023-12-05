@@ -63,7 +63,7 @@ module "wck_external_alb" {
 
       # Enable fixed-response message
       action_type        = "fixed-response"
-      fixed_response = {
+      fixed_response     = {
         content_type = "text/html"
         message_body = file("${path.module}/files/fe_fixed_response_message_body")
         status_code  = "200"
