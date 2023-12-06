@@ -23,7 +23,7 @@ module "wck_external_alb_security_group" {
 #--------------------------------------------
 module "wck_external_alb" {
   source  = "terraform-aws-modules/alb/aws"
-  version = "~> 5.0"
+  version = "~> 5.16.0"
 
   name                       = "alb-${var.application}-external-001"
   vpc_id                     = data.aws_vpc.vpc.id
@@ -60,6 +60,14 @@ module "wck_external_alb" {
       protocol           = "HTTPS"
       certificate_arn    = data.aws_acm_certificate.acm_cert.arn
       target_group_index = 0
+
+      # Enable fixed-response message
+      action_type        = "fixed-response"
+      fixed_response     = {
+        content_type = "text/html"
+        message_body = file("${path.module}/files/fe_alb_external_message_body.html")
+        status_code  = "200"
+      }
     },
   ]
 

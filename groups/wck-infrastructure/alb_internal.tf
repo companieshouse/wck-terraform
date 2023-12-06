@@ -38,7 +38,7 @@ module "wck_internal_alb_security_group" {
 #--------------------------------------------
 module "wck_internal_alb" {
   source  = "terraform-aws-modules/alb/aws"
-  version = "~> 5.0"
+  version = "~> 5.16.0"
 
   name                       = "alb-${var.application}-internal-001"
   vpc_id                     = data.aws_vpc.vpc.id
