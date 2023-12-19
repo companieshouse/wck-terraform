@@ -2,10 +2,10 @@
 # Redirect the user-data output to the console logs
 exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
 
+GET_PARAM_COMMAND="/usr/local/bin/aws ssm get-parameter --with-decryption --region ${REGION} --output text --query Parameter.Value --name"
+
 #Create key:value variable
-cat <<EOF >>inputs.json
-${WCK_FRONTEND_INPUTS}
-EOF
+$${GET_PARAM_COMMAND} '${WCK_FRONTEND_INPUTS_PATH}' > inputs.json
 #Set DATABASE environment variable
 echo "export DATABASE=ORACLE" >> /home/wck/.bash_profile
 #Update Nagios registration script with relevant template
@@ -22,7 +22,9 @@ rm /etc/httpd/conf.d/perl.conf
 #Create and populate the perl config
 /usr/local/bin/j2 -f json /etc/httpd/conf.d/wck_perl.conf.j2 inputs.json > /etc/httpd/conf.d/wck_perl.conf
 #Run Ansible playbook for Frontend deployment using provided inputs
-/usr/local/bin/ansible-playbook /root/frontend_deployment.yml -e '${ANSIBLE_INPUTS}'
+$${GET_PARAM_COMMAND} '${ANSIBLE_INPUTS_PATH}' > /root/ansible_inputs.json
+echo "Deploying ${APP_VERSION}"
+/usr/local/bin/ansible-playbook /root/frontend_deployment.yml -e '@/root/ansible_inputs.json'
 # Update hostname and reboot
 INSTANCEID=$(curl http://169.254.169.254/latest/meta-data/instance-id)
 sed -i "s/HOSTNAME=.*/HOSTNAME=$INSTANCEID/" /etc/sysconfig/network

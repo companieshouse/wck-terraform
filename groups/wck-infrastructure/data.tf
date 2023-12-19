@@ -140,10 +140,11 @@ data "template_file" "fe_userdata" {
   template = file("${path.module}/templates/fe_user_data.tpl")
 
   vars = {
-    REGION               = var.aws_region
-    HERITAGE_ENVIRONMENT = title(var.environment)
-    WCK_FRONTEND_INPUTS  = local.wck_fe_data
-    ANSIBLE_INPUTS       = jsonencode(local.wck_fe_ansible_inputs)
+    REGION                   = var.aws_region
+    HERITAGE_ENVIRONMENT     = title(var.environment)
+    APP_VERSION              = var.fe_app_release_version
+    WCK_FRONTEND_INPUTS_PATH = "${local.parameter_store_path_prefix}/frontend_inputs"
+    ANSIBLE_INPUTS_PATH      = "${local.parameter_store_path_prefix}/frontend_ansible_inputs"
   }
 }
 
@@ -177,15 +178,20 @@ data "vault_generic_secret" "wck_bep_data" {
   path = "applications/${var.aws_account}-${var.aws_region}/${var.application}/backend"
 }
 
+data "template_file" "wck_cron_file" {
+  template = file("${path.module}/templates/${var.aws_profile}/bep_cron.tpl")
+}
+
 data "template_file" "bep_userdata" {
   template = file("${path.module}/templates/bep_user_data.tpl")
 
   vars = {
-    REGION               = var.aws_region
-    HERITAGE_ENVIRONMENT = title(var.environment)
-    WCK_BACKEND_INPUTS   = local.wck_bep_data
-    ANSIBLE_INPUTS       = jsonencode(local.wck_bep_ansible_inputs)
-    WCK_CRON_ENTRIES     = templatefile("${path.module}/templates/${var.aws_profile}/bep_cron.tpl", {})
+    REGION                  = var.aws_region
+    HERITAGE_ENVIRONMENT    = title(var.environment)
+    APP_VERSION             = var.bep_app_release_version
+    WCK_BACKEND_INPUTS_PATH = "${local.parameter_store_path_prefix}/backend_inputs"
+    ANSIBLE_INPUTS_PATH     = "${local.parameter_store_path_prefix}/backend_ansible_inputs"
+    WCK_CRON_ENTRIES_PATH   = "${local.parameter_store_path_prefix}/backend_cron_entries"
   }
 }
 
