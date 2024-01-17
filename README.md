@@ -1,6 +1,6 @@
 # wck-terraform
 
-> [!ALERT]
+> [!WARNING]
 > This service has been deprecated. A minimal set of infrastructure is being maintained in the `ch-heritage-live` account to support a customer-facing service discontinuation page for a period of time before this repository will be archived.
 
 ## What is this repo?
