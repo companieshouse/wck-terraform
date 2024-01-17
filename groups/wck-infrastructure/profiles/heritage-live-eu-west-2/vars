@@ -6,5 +6,3 @@ application = "wck"
 fe_public_access_cidrs = [
   "0.0.0.0/0"
 ]
-
-enable_sns_topic = true
