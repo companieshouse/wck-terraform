@@ -44,7 +44,6 @@ module "wck_external_alb" {
     {
       port               = 80
       protocol           = "HTTP"
-      target_group_index = 0
       action_type        = "redirect"
       redirect = {
         port        = "443"
@@ -60,39 +59,13 @@ module "wck_external_alb" {
       protocol           = "HTTPS"
       certificate_arn    = data.aws_acm_certificate.acm_cert.arn
       target_group_index = 0
-
-      # Enable fixed-response message
       action_type        = "fixed-response"
       fixed_response     = {
-        content_type = "text/html"
-        message_body = file("${path.module}/files/fe_alb_external_message_body.html")
-        status_code  = "200"
+        content_type     = "text/html"
+        message_body     = file("${path.module}/files/fe_alb_external_message_body.html")
+        status_code      = "200"
       }
-    },
-  ]
-
-  target_groups = [
-    {
-      name                 = "tg-${var.application}-external-001"
-      backend_protocol     = "HTTP"
-      backend_port         = var.fe_service_port
-      target_type          = "instance"
-      deregistration_delay = 10
-      health_check = {
-        enabled             = true
-        interval            = 30
-        path                = var.fe_health_check_path
-        port                = var.fe_service_port
-        healthy_threshold   = 3
-        unhealthy_threshold = 3
-        timeout             = 6
-        protocol            = "HTTP"
-        matcher             = "200-399"
-      }
-      tags = {
-        InstanceTargetGroupTag = var.application
-      }
-    },
+    }
   ]
 
   tags = merge(
@@ -101,30 +74,4 @@ module "wck_external_alb" {
       "ServiceTeam", "${upper(var.application)}-FE-Support"
     )
   )
-}
-
-#--------------------------------------------
-# External ALB CloudWatch Alarms
-#--------------------------------------------
-module "wck_external_alb_alarms" {
-  source = "git@github.com:companieshouse/terraform-modules//aws/alb-cloudwatch-alarms?ref=tags/1.0.104"
-
-  alb_arn_suffix            = module.wck_external_alb.this_lb_arn_suffix
-  target_group_arn_suffixes = module.wck_external_alb.target_group_arn_suffixes
-
-  prefix                    = "wck-frontend-"
-  response_time_threshold   = "100"
-  evaluation_periods        = "3"
-  statistic_period          = "60"
-  maximum_4xx_threshold     = "2"
-  maximum_5xx_threshold     = "2"
-  unhealthy_hosts_threshold = "1"
-
-  actions_alarm = var.enable_sns_topic ? [module.cloudwatch_sns_notifications[0].sns_topic_arn] : []
-  actions_ok    = var.enable_sns_topic ? [module.cloudwatch_sns_notifications[0].sns_topic_arn] : []
-
-  depends_on = [
-    module.cloudwatch_sns_notifications,
-    module.wck_external_alb
-  ]
 }
