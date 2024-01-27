@@ -34,14 +34,8 @@ module "nlb_fe_external" {
       port               = 443
       protocol           = "TCP"
       target_group_index = 1
-    },
-    {
-      port               = 21
-      protocol           = "TCP"
-      target_group_index = 2
     }
-  ],
-  local.wck_fe_ftp_ext_passive_listeners)
+  ])
 
   target_groups = concat([
     {
@@ -89,27 +83,8 @@ module "nlb_fe_external" {
       tags = {
         InstanceTargetGroupTag = var.application
       }
-    },
-    {
-      name                 = "tg-${var.application}-fe-external-ftp-001"
-      backend_protocol     = "TCP"
-      backend_port         = 2121
-      target_type          = "instance"
-      deregistration_delay = 10
-      health_check = {
-        enabled             = true
-        interval            = 30
-        port                = 2121
-        healthy_threshold   = 3
-        unhealthy_threshold = 3
-        protocol            = "TCP"
-      }
-      tags = {
-        InstanceTargetGroupTag = var.application
-      }
-    },
-  ],
-  local.wck_fe_external_ftp_passive_tgs)
+    }
+  ])
 
   tags = merge(
     local.default_tags,
